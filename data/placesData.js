@@ -17,7 +17,7 @@ export const placesData = [
       am: 'ምሽት ላይ ቅዝቃዜው ስለሚጨምር ሞቅ ያሉ ልብሶችን ይዘው ይምጡ። የጉዞ ጫማ ይልበሱ።',
       or: 'Halkan qabbanni waan dabaluuf uffata ho’aa qabadhaa. Kophii daandii uffadhab.',
     },
-    image: require('../assets/images/bale_mountains.png'),
+    image: require('../assets/images/bale_mountains.jpg'),
     coordinates: {
       latitude: 6.7025,
       longitude: 39.7186,
@@ -41,7 +41,7 @@ export const placesData = [
       am: 'ገበያው ቅዳሜ ጠዋት በጠዋት በጣም ይደመቃል። ጠዋት በመጀመር ይጎብኙ።',
       or: 'Gabaan kun sa’aatii ganamatti guyyaa Sanbataa baay’ee ho’aa dha. Ganama dursee daawwadhu.',
     },
-    image: require('../assets/images/horse_market.png'),
+    image: require('../assets/images/horse_market.jpg'),
     coordinates: {
       latitude: 6.9833,
       longitude: 39.1833,
@@ -65,7 +65,7 @@ export const placesData = [
       am: 'ለሚያንሸራትተው መንገድ ውሃ የማይያስገቡ የጫካ ጫማዎችን ያድርጉ።',
       or: 'Daandiiwwan mucucaatan dabalataaf kophee bishaan hin galchine uffadhaa.',
     },
-    image: require('../assets/images/waterfall.png'),
+    image: require('../assets/images/waterfall.jpg'),
     coordinates: {
       latitude: 6.9500,
       longitude: 39.2000,
@@ -89,7 +89,7 @@ export const placesData = [
       am: 'ስለ የተለያዩ ዕፅዋት የበለጠ ለማወቅ ሁልጊዜ የአካባቢውን አስጎብኝ ይቅጠሩ።',
       or: 'Qabeenya biqiltuu garagaraa barachuuf yeroo hunda qajeelchaa naannoo qajjeelfadhaa.',
     },
-    image: require('../assets/images/dodola_forest.png'),
+    image: require('../assets/images/dodola_forest.jpg'),
     coordinates: {
       latitude: 6.9700,
       longitude: 39.1500,
@@ -113,7 +113,7 @@ export const placesData = [
       am: 'የተወላጆቹን የቅርብ ፎቶ ከመነሳትዎ በፊት ፈቃድ ይጠይቁ።',
       or: 'Waraabbii suuraa dhiyeenyatti fudhachuu dura hayyama gaafadhaa.',
     },
-    image: require('../assets/images/traditional_dance.png'),
+    image: require('../assets/images/traditional_dance.jpg'),
     coordinates: {
       latitude: 6.9850,
       longitude: 39.1850,

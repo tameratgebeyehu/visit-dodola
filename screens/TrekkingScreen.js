@@ -58,7 +58,7 @@ const TrekkingScreen = () => {
         {/* Banner Hero */}
         <Animated.View entering={FadeInDown.duration(600)}>
           <ImageBackground 
-            source={require('../assets/images/bale_mountains.png')} 
+            source={require('../assets/images/bale_mountains.jpg')} 
             style={styles.heroBanner}
           >
             <View style={styles.heroOverlay}>
@@ -89,7 +89,7 @@ const TrekkingScreen = () => {
            <Text style={styles.sectionHeader}>{t('trekkingMap')}</Text>
            <View style={styles.mapWrapper}>
              <ImageBackground 
-               source={require('../assets/images/bale_mountains.png')} // Currently using the banner as a map base
+               source={require('../assets/images/bale_mountains.jpg')} // Currently using the banner as a map base
                style={styles.interactiveMap}
                imageStyle={{ opacity: 0.5, borderRadius: 16 }}
              >

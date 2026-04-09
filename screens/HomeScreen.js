@@ -4,33 +4,26 @@ import {
   View, 
   Text, 
   TouchableOpacity, 
-  ScrollView,
+  Pressable,
   StatusBar,
   Platform,
   ImageBackground,
   Dimensions,
-  FlatList
+  FlatList,
+  ScrollView
 } from 'react-native';
-import Animated, { FadeInRight } from 'react-native-reanimated';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Heart } from 'lucide-react-native';
 import { useLanguage } from '../context/LanguageContext';
+import { useFavorites } from '../context/FavoritesContext';
 import LanguageSelector from '../components/LanguageSelector';
 import { placesData } from '../data/placesData';
-import CardItem from '../components/CardItem';
 
 const { width } = Dimensions.get('window');
 
-const COLORS = {
-  background: '#121212',
-  surface: '#1E1E1E',
-  neon: '#00E676',
-  white: '#FFFFFF',
-  gray: '#AAAAAA',
-  darkGray: '#333333',
-};
-
 const HomeScreen = ({ navigation }) => {
   const { t, language } = useLanguage();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [activeCategory, setActiveCategory] = useState(null);
 
   const categories = [
@@ -40,44 +33,20 @@ const HomeScreen = ({ navigation }) => {
     { key: 'trekking', icon: 'terrain', label: 'Trekking' },
   ];
 
-  // Drive the cinematic horizontal carousel with the first 3 locations
   const featuredPlaces = placesData.slice(0, 3);
   
-  // Conditionally process the vertical feed depending on the selected pill
   const filteredPlaces = activeCategory && activeCategory !== 'all' 
     ? placesData.filter(p => p.category.toLowerCase() === activeCategory.toLowerCase())
     : placesData.slice(3, 10);
-
-  const renderFeaturedCard = ({ item, index }) => (
-    <Animated.View entering={FadeInRight.delay(index * 150).duration(600)}>
-      <TouchableOpacity 
-        style={styles.featuredCard}
-        activeOpacity={0.8}
-        onPress={() => navigation.navigate('Detail', { item })}
-      >
-        <ImageBackground source={item.image} style={styles.featuredImage} imageStyle={{ borderRadius: 20 }}>
-          <View style={styles.featuredOverlay}>
-            <View style={styles.featuredTag}>
-              <Text style={styles.featuredTagText}>{t(item.category.toLowerCase())}</Text>
-            </View>
-            <View>
-              <Text style={styles.featuredTitle}>{item.title[language]}</Text>
-              <View style={styles.featuredLocation}>
-                <MaterialIcons name="location-on" color={COLORS.neon} size={16} />
-                <Text style={styles.featuredLocationText}>Dodola, Oromia</Text>
-              </View>
-            </View>
-          </View>
-        </ImageBackground>
-      </TouchableOpacity>
-    </Animated.View>
-  );
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       
-      {/* Premium Dark Dashboard Header */}
+      {/* Decorative glow - non-interactive */}
+      <View style={styles.topGlow} pointerEvents="none" />
+
+      {/* Premium Header */}
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>{t('welcome')},</Text>
@@ -88,27 +57,50 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={styles.scrollContent}
+      >
         
-        {/* Featured Infinite Carousel */}
+        {/* Featured Section */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>{t('discovery')}</Text>
         </View>
         
-        <View style={styles.carouselContainer}>
-          <FlatList
-            data={featuredPlaces}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.id}
-            renderItem={renderFeaturedCard}
-            contentContainerStyle={styles.carouselList}
-            snapToInterval={width * 0.8 + 16}
-            decelerationRate="fast"
-          />
-        </View>
+        {/* Featured Horizontal Cards */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.carouselList}
+          decelerationRate="fast"
+          snapToInterval={width * 0.82 + 20}
+        >
+          {featuredPlaces.map((item, index) => (
+            <TouchableOpacity 
+              key={item.id}
+              style={styles.featuredCard}
+              activeOpacity={0.85}
+              onPress={() => navigation.navigate('Detail', { item })}
+            >
+              <ImageBackground source={item.image} style={styles.featuredImage} imageStyle={{ borderRadius: 25 }}>
+                <View style={styles.featuredOverlay}>
+                  <View style={styles.featuredTag}>
+                    <Text style={styles.featuredTagText}>{t(item.category.toLowerCase())}</Text>
+                  </View>
+                  <View style={styles.featuredBottomLayer}>
+                    <Text style={styles.featuredTitle}>{item.title[language]}</Text>
+                    <View style={styles.featuredLocation}>
+                      <MaterialIcons name="location-on" color="#00E676" size={16} />
+                      <Text style={styles.featuredLocationText}>Dodola, Oromia</Text>
+                    </View>
+                  </View>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
 
-        {/* Horizontal Category Row */}
+        {/* Categories Section */}
         <ScrollView 
           horizontal 
           showsHorizontalScrollIndicator={false} 
@@ -125,7 +117,7 @@ const HomeScreen = ({ navigation }) => {
               >
                 <MaterialIcons 
                   name={cat.icon} 
-                  color={isActive ? COLORS.background : COLORS.gray} 
+                  color={isActive ? '#121212' : '#888'} 
                   size={18} 
                 />
                 <Text style={[styles.categoryText, isActive && styles.categoryTextActive]}>
@@ -136,18 +128,58 @@ const HomeScreen = ({ navigation }) => {
           })}
         </ScrollView>
 
-        {/* Smart Vertical Feed */}
+        {/* Popular List Section */}
         <View style={styles.popularHeader}>
-           <Text style={styles.sectionTitle}>Popular</Text>
+           <Text style={styles.sectionTitle}>Popular Destinations</Text>
         </View>
         
         <View style={styles.popularList}>
           {filteredPlaces.map((item, index) => (
-            <CardItem key={item.id} item={item} index={index} navigation={navigation} />
+            <TouchableOpacity
+              key={item.id}
+              style={styles.card}
+              activeOpacity={0.85}
+              onPress={() => navigation.navigate('Detail', { item })}
+            >
+              <View>
+                <ImageBackground source={item.image} style={styles.cardImage}>
+                  {/* Heart Button */}
+                  <Pressable
+                    style={[
+                      styles.heartOverlay,
+                      isFavorite(item.id) && styles.heartOverlayActive
+                    ]}
+                    onPress={() => toggleFavorite(item.id)}
+                    hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  >
+                    <Heart 
+                      color={isFavorite(item.id) ? '#00E676' : '#FFFFFF'} 
+                      fill={isFavorite(item.id) ? '#00E676' : 'transparent'} 
+                      size={20} 
+                      strokeWidth={2.5}
+                    />
+                  </Pressable>
+                </ImageBackground>
+              </View>
+
+              <View style={styles.cardContent}>
+                <Text style={styles.cardTitle}>{item.title[language]}</Text>
+                <Text style={styles.cardDesc} numberOfLines={2}>
+                  {item.description[language]}
+                </Text>
+                
+                <View style={styles.cardFooter}>
+                  <Text style={styles.readMoreText}>{t('readMore')}</Text>
+                  <View style={styles.iconCircle}>
+                    <MaterialIcons name="arrow-forward" color="#121212" size={14} />
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
           ))}
         </View>
         
-        <View style={{ height: 40 }} />
+        <View style={{ height: 50 }} />
       </ScrollView>
     </View>
   );
@@ -156,74 +188,72 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: '#0A0A0A',
+  },
+  topGlow: {
+    position: 'absolute',
+    top: -100,
+    left: -50,
+    width: 300,
+    height: 300,
+    backgroundColor: 'rgba(0, 230, 118, 0.05)',
+    borderRadius: 200,
   },
   header: {
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 16 : 16,
-    paddingHorizontal: 16,
-    paddingBottom: 16,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 16 : 45,
+    paddingHorizontal: 20,
+    paddingBottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   greeting: {
     fontSize: 16,
-    color: COLORS.neon,
+    color: '#00E676',
     fontFamily: 'Inter_600SemiBold',
     marginBottom: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   appTitle: {
-    fontSize: 26,
-    fontWeight: '800',
-    color: COLORS.white,
-    fontFamily: 'Inter_700Bold',
+    fontSize: 28,
+    color: '#FFFFFF',
+    fontFamily: 'Inter_800ExtraBold',
     letterSpacing: -0.5,
   },
   headerActions: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  iconBtn: {
-    marginLeft: 16,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: COLORS.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.darkGray,
-  },
   scrollContent: {
-    paddingTop: 10,
+    paddingTop: 15,
   },
   sectionHeader: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 22,
-    fontWeight: '700',
-    color: COLORS.white,
-    fontFamily: 'Inter_700Bold',
-  },
-  carouselContainer: {
-    marginBottom: 24,
+    color: '#FFFFFF',
+    fontFamily: 'Inter_800ExtraBold',
   },
   carouselList: {
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginBottom: 30,
   },
   featuredCard: {
-    width: width * 0.8,
-    height: 380,
-    marginRight: 16,
-    borderRadius: 20,
+    width: width * 0.82,
+    height: 400,
+    marginRight: 20,
+    borderRadius: 25,
+    elevation: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
-    shadowRadius: 15,
-    elevation: 8,
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
+    borderWidth: 1,
+    borderColor: '#222',
   },
   featuredImage: {
     width: '100%',
@@ -231,35 +261,41 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   featuredOverlay: {
-    padding: 20,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    height: '100%',
+    flex: 1,
+    backgroundColor: 'rgba(10,10,10,0.4)',
+    borderRadius: 25,
+    padding: 24,
     justifyContent: 'space-between',
   },
   featuredTag: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(0,230,118,0.2)',
+    backgroundColor: 'rgba(0, 230, 118, 0.8)',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(0,230,118,0.5)',
+    borderRadius: 10,
     marginTop: 10,
   },
   featuredTagText: {
-    color: COLORS.white,
-    fontSize: 12,
-    fontWeight: '700',
+    color: '#121212',
+    fontSize: 11,
+    fontFamily: 'Inter_800ExtraBold',
     textTransform: 'uppercase',
-    fontFamily: 'Inter_700Bold',
+    letterSpacing: 1,
+  },
+  featuredBottomLayer: {
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    marginHorizontal: -24,
+    marginBottom: -24,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
   },
   featuredTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: COLORS.white,
-    fontFamily: 'Inter_700Bold',
+    fontSize: 30,
+    color: '#FFFFFF',
+    fontFamily: 'Inter_800ExtraBold',
+    lineHeight: 38,
     textShadowColor: 'rgba(0,0,0,0.8)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
@@ -270,47 +306,129 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   featuredLocationText: {
-    color: COLORS.white,
+    color: '#E0E0E0',
     fontSize: 14,
-    fontWeight: '600',
     marginLeft: 6,
     fontFamily: 'Inter_600SemiBold',
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   categoryRow: {
-    paddingHorizontal: 16,
-    marginBottom: 30,
-    gap: 12, // React Native flex gap
+    paddingHorizontal: 20,
+    marginBottom: 35,
   },
   categoryPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.surface,
+    backgroundColor: '#161616',
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: COLORS.darkGray,
+    borderColor: '#333',
+    marginRight: 12,
   },
   categoryPillActive: {
-    backgroundColor: COLORS.neon,
-    borderColor: COLORS.neon,
+    backgroundColor: '#00E676',
+    borderColor: '#00E676',
   },
   categoryText: {
-    color: COLORS.gray,
+    color: '#888',
     fontSize: 15,
-    fontWeight: '600',
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'Inter_700Bold',
     marginLeft: 8,
+    letterSpacing: 0.3,
   },
   categoryTextActive: {
-    color: COLORS.background,
+    color: '#121212',
   },
   popularHeader: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     marginBottom: 16,
   },
   popularList: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
+  },
+
+  // INLINE CARD STYLES (no more separate CardItem component dependency for touch issues)
+  card: {
+    backgroundColor: '#141414',
+    borderRadius: 20,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#262626',
+    overflow: 'hidden',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.3,
+        shadowRadius: 15,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
+  },
+  cardImage: {
+    width: '100%',
+    height: 180,
+  },
+  heartOverlay: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    backgroundColor: 'rgba(10, 10, 10, 0.7)',
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    zIndex: 99,
+  },
+  heartOverlayActive: {
+    backgroundColor: 'rgba(0, 230, 118, 0.15)',
+    borderColor: 'rgba(0, 230, 118, 0.3)',
+  },
+  cardContent: {
+    padding: 20,
+  },
+  cardTitle: {
+    fontSize: 20,
+    color: '#FFFFFF',
+    marginBottom: 8,
+    fontFamily: 'Inter_800ExtraBold',
+    letterSpacing: 0.2,
+  },
+  cardDesc: {
+    fontSize: 14,
+    color: '#AAAAAA',
+    lineHeight: 22,
+    marginBottom: 16,
+    fontFamily: 'Inter_400Regular',
+  },
+  cardFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#222',
+  },
+  readMoreText: {
+    fontSize: 14,
+    color: '#00E676',
+    fontFamily: 'Inter_700Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  iconCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#00E676',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

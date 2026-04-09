@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Home, Compass, Heart, Library } from 'lucide-react-native';
+import { Home, Compass, Heart, Library, BookOpen } from 'lucide-react-native';
 import { useLanguage } from '../context/LanguageContext';
 
 // Screens
@@ -12,6 +12,7 @@ import DetailScreen from '../screens/DetailScreen';
 import InfoScreen from '../screens/InfoScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import ServiceDetailScreen from '../screens/ServiceDetailScreen';
+import EssenceScreen from '../screens/EssenceScreen';
 
 // Onboarding Screens
 import SplashScreen from '../screens/onboarding/SplashScreen';
@@ -72,8 +73,16 @@ const TabNavigator = () => {
         name="InfoTab" 
         component={InfoScreen} 
         options={{
-          tabBarLabel: 'Directory',
+          tabBarLabel: t('directory') || 'Directory',
           tabBarIcon: ({ color, size }) => <Library color={color} size={size} />,
+        }}
+      />
+      <Tab.Screen 
+        name="EssenceTab" 
+        component={EssenceScreen} 
+        options={{
+          tabBarLabel: t('essence') || 'Story',
+          tabBarIcon: ({ color, size }) => <BookOpen color={color} size={size} />,
         }}
       />
     </Tab.Navigator>

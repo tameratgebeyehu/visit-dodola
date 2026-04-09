@@ -6,7 +6,8 @@ import {
   useFonts, 
   Inter_400Regular, 
   Inter_600SemiBold, 
-  Inter_700Bold 
+  Inter_700Bold,
+  Inter_800ExtraBold 
 } from '@expo-google-fonts/inter';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -25,6 +26,7 @@ export default function App() {
     Inter_400Regular,
     Inter_600SemiBold,
     Inter_700Bold,
+    Inter_800ExtraBold,
   });
 
   const [securityVerified, setSecurityVerified] = useState(false);
@@ -68,7 +70,7 @@ export default function App() {
           <LanguageProvider>
             <NavigationContainer>
               <View style={styles.container} onLayout={onLayoutRootView}>
-                <StatusBar style="dark" />
+                <StatusBar style="light" />
                 <Navigator />
               </View>
             </NavigationContainer>
@@ -82,6 +84,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#121212',
   },
 });

@@ -1,6 +1,7 @@
 export const services = {
   public: {
     type: 'flat',
+    coverImage: require('../assets/images/dir_public.png'),
     items: [
       {
         id: 'p1',
@@ -46,6 +47,7 @@ export const services = {
   },
   education: {
     type: 'nested',
+    coverImage: require('../assets/images/dir_education.png'),
     subcategories: {
       highSchools: [
         { id: 'e1', title: { en: 'Ifa Boru Special Boarding School', am: 'ኢፋ ቦሩ ልዩ አዳሪ ትምህርት ቤት', or: 'Mana Barumsaa Bultii Addaa Ifa Boruu' }, icon: 'school' },
@@ -68,6 +70,7 @@ export const services = {
   },
   banking: {
     type: 'flat',
+    coverImage: require('../assets/images/dir_banking.png'),
     items: [
       { id: 'b1', title: { en: 'Commercial Bank of Ethiopia', am: 'የኢትዮጵያ ንግድ ባንክ', or: 'Baankii Daldala Itiyoophiyaa' }, icon: 'account-balance' },
       { id: 'b2', title: { en: 'Cooperative Bank of Oromia', am: 'የኦሮሚያ ህብረት ስራ ባንክ', or: 'Baankii Hojii Gamtaa Oromiyaa' }, icon: 'account-balance' },
@@ -84,18 +87,32 @@ export const services = {
   },
   hospitality: {
     type: 'nested',
+    coverImage: require('../assets/images/dir_hospitality.png'),
     subcategories: {
       hotels: [
         { id: 'h1', title: { en: 'Rose Hotel & Apartment', am: 'ሮዝ ሆቴልና አፓርትመንት', or: 'Hoteelaafi Apaartimantii Rooz' }, icon: 'hotel' },
-        { id: 'h2', title: { en: 'TG Hotel', am: 'ቲጂ ሆቴል', or: 'TG Hoteela' }, icon: 'hotel' }
+        { id: 'h2', title: { en: 'TG Hotel', am: 'ቲጂ ሆቴል', or: 'TG Hoteela' }, icon: 'hotel' },
+        { id: 'h4', title: { en: 'Ker Amin Hotel', am: 'ኬር አሚን ሆቴል', or: 'Hoteela Keer Amiin' }, icon: 'hotel' },
+        { id: 'h5', title: { en: 'Bale Mountains Hotel', am: 'ባሌ ማውንቴንስ ሆቴል', or: 'Hoteela Gaarreewwan Baale' }, icon: 'hotel' },
+        { id: 'h6', title: { en: 'Yeronke Hotel', am: 'የሮንኬ ሆቴል', or: 'Hoteela Yaronkee' }, icon: 'hotel' },
+        { id: 'h7', title: { en: 'Addis Hotel', am: 'አዲስ ሆቴል', or: 'Hoteela Addis' }, icon: 'hotel' },
+        { id: 'h8', title: { en: 'Meraf 1 Hotel', am: 'ምዕራፍ 1 ሆቴል', or: 'Hoteela Meraaf 1ffaa' }, icon: 'hotel' },
+        { id: 'h9', title: { en: 'Lasta Hotel', am: 'ላስታ ሆቴል', or: 'Hoteela Laastaa' }, icon: 'hotel' }
       ],
       guestRooms: [
         { id: 'h3', title: { en: 'Lekko Guest Rooms', am: 'ሌኮ የእንግዳ ማረፊያ', or: 'Kutaawwan Keessummaa Lekkoo' }, icon: 'meeting-room' }
+      ],
+      localEats: [
+        { id: 'h10', title: { en: 'Tesfaye Butcher', am: 'ተስፋዬ ስጋ ቤት', or: 'Foon Qalaa Tesfaayee' }, icon: 'restaurant' }
+      ],
+      cafes: [
+        { id: 'h11', title: { en: 'AMAZON Cafe', am: 'አማዞን ካፌ', or: 'Kaaffee AMAZON' }, icon: 'local-cafe' }
       ]
     }
   },
   utilities: {
     type: 'nested',
+    coverImage: require('../assets/images/dir_utilities.png'),
     subcategories: {
       gasStations: [
         { id: 'g1', title: { en: 'Africa Gas Station', am: 'አፍሪካ ነዳጅ ማደያ', or: 'Buufata Boba\'aa Afrikaa' }, icon: 'local-gas-station', phone: null, description: { en: 'Located on the main road, a central hub for long-distance trucks and buses.', am: 'በዋናው መንገድ ላይ የሚገኝ፣ ለረጅም ርቀት የጭነት መኪናዎች እና አውቶቡሶች ማዕከል ነው።', or: 'Daandii guddaa irratti kan argamu, iddoo giddu gala konkolaattota fe\'umsa fi awutoobusoota fageenya dheeraa deeman ti.' } },

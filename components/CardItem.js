@@ -5,6 +5,7 @@ import {
   Text, 
   Image, 
   TouchableOpacity, 
+  Pressable,
   Platform 
 } from 'react-native';
 import Animated, { FadeInRight, Layout } from 'react-native-reanimated';
@@ -17,29 +18,32 @@ const CardItem = ({ item, index, navigation }) => {
   const { isFavorite, toggleFavorite } = useFavorites();
 
   return (
-    <Animated.View 
-      entering={FadeInRight.delay(index * 100).duration(500)}
-      layout={Layout.springify()}
-    >
+    <View>
       <TouchableOpacity 
         style={styles.card}
         onPress={() => navigation.navigate('Detail', { item })}
-        activeOpacity={0.7}
-        delayPressIn={100}
+        activeOpacity={0.8}
       >
-        <Image source={item.image} style={styles.image} />
-        
-        {/* Heart Toggle Overlay */}
-        <TouchableOpacity 
-          style={styles.heartOverlay}
-          onPress={() => toggleFavorite(item.id)}
-        >
-          <Heart 
-            color={isFavorite(item.id) ? '#00E676' : '#FFFFFF'} 
-            fill={isFavorite(item.id) ? '#00E676' : 'transparent'} 
-            size={20} 
-          />
-        </TouchableOpacity>
+        <View>
+          <Image source={item.image} style={styles.image} />
+          
+          {/* Heart Toggle Overlay - Using Pressable to avoid nested TouchableOpacity conflicts */}
+          <Pressable 
+            style={styles.heartOverlay}
+            onPress={(e) => {
+              e.stopPropagation();
+              toggleFavorite(item.id);
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Heart 
+              color={isFavorite(item.id) ? '#00E676' : '#FFFFFF'} 
+              fill={isFavorite(item.id) ? '#00E676' : 'transparent'} 
+              size={20} 
+              strokeWidth={2.5}
+            />
+          </Pressable>
+        </View>
 
         <View style={styles.cardContent}>
           <Text style={styles.title}>{item.title[language]}</Text>
@@ -50,78 +54,86 @@ const CardItem = ({ item, index, navigation }) => {
           <View style={styles.cardFooter}>
             <Text style={styles.readMoreText}>{t('readMore')}</Text>
             <View style={styles.iconCircle}>
-              <ArrowRight color="#121212" size={14} />
+              <ArrowRight color="#121212" size={14} strokeWidth={3} />
             </View>
           </View>
         </View>
       </TouchableOpacity>
-    </Animated.View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#1E1E1E',
-    borderRadius: 16,
-    marginBottom: 16,
+    backgroundColor: '#141414',
+    borderRadius: 20,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#262626',
     overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.3,
+        shadowRadius: 15,
       },
       android: {
-        elevation: 4,
+        elevation: 8,
       },
     }),
   },
   image: {
     width: '100%',
-    height: 160,
+    height: 180,
     resizeMode: 'cover',
   },
   heartOverlay: {
     position: 'absolute',
     top: 15,
     right: 15,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    padding: 8,
+    backgroundColor: 'rgba(10, 10, 10, 0.7)',
+    padding: 10,
     borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   cardContent: {
-    padding: 16,
+    padding: 20,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 20,
     color: '#FFFFFF',
-    marginBottom: 6,
-    fontFamily: 'Inter_700Bold',
+    marginBottom: 8,
+    fontFamily: 'Inter_800ExtraBold',
+    letterSpacing: 0.2,
   },
   description: {
     fontSize: 14,
     color: '#AAAAAA',
-    lineHeight: 20,
-    marginBottom: 12,
+    lineHeight: 22,
+    marginBottom: 16,
     fontFamily: 'Inter_400Regular',
   },
   cardFooter: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#222',
   },
   readMoreText: {
     fontSize: 14,
-    fontWeight: '600',
     color: '#00E676',
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'Inter_700Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   iconCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: '#00E676',
     alignItems: 'center',
     justifyContent: 'center',

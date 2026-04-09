@@ -29,21 +29,21 @@ const OnboardingSlidesScreen = ({ navigation }) => {
       id: '1',
       title: 'onboarding1Title',
       desc: 'onboarding1Desc',
-      image: require('../../assets/images/bale_mountains.png'),
+      image: require('../../assets/images/bale_mountains.jpg'),
       color: '#E8F5E9',
     },
     {
       id: '2',
       title: 'onboarding2Title',
       desc: 'onboarding2Desc',
-      image: require('../../assets/images/horse_market.png'),
+      image: require('../../assets/images/horse_market.jpg'),
       color: '#E3F2FD',
     },
     {
       id: '3',
       title: 'onboarding3Title',
       desc: 'onboarding3Desc',
-      image: require('../../assets/images/hero.png'), // Using hero as emergency info backdrop for now
+      image: require('../../assets/images/hero.jpg'), // Using hero as emergency info backdrop for now
       color: '#FFEBEE',
     },
   ];

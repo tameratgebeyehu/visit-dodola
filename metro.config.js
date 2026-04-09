@@ -12,7 +12,7 @@ const config = getDefaultConfig(__dirname);
 config.resolver.unstable_enablePackageExports = false;
 
 // 2. Disable unstable symlinks if enabled, as it can also trigger the scanning.
-config.resolver.unstable_enableSymlinks = false;
+// config.resolver.unstable_enableSymlinks = false;
 
 // 3. Ensure we don't resolve node-specific shims for standard core modules in the web build
 // which is where the sea-shim is often triggered.
